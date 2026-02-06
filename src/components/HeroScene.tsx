@@ -32,11 +32,11 @@ const HeroScene = () => {
         {/* Moon Glow Layer */}
         <MoonGlowLayer />
 
-        {/* Left Character */}
+        {/* Left Character - Demon/Halo character */}
         <div className="absolute left-0 md:left-8 lg:left-16 bottom-0 md:bottom-8 z-10">
           <PixelImage
-            src={characterLeft}
-            alt="Left character"
+            src={characterRight}
+            alt="Demon character"
             className="w-24 h-32 md:w-40 md:h-52 lg:w-52 lg:h-64"
             glowIntensity="soft"
             animationSpeed="slow"
@@ -52,14 +52,16 @@ const HeroScene = () => {
             className="w-48 h-48 md:w-72 md:h-72 lg:w-96 lg:h-96"
             glowIntensity="strong"
             animationSpeed="normal"
+            removeWhiteBg
+            isMoon
           />
         </div>
 
-        {/* Right Character */}
+        {/* Right Character - Sword character */}
         <div className="absolute right-0 md:right-8 lg:right-16 bottom-0 md:bottom-8 z-10">
           <PixelImage
-            src={characterRight}
-            alt="Right character"
+            src={characterLeft}
+            alt="Sword character"
             className="w-24 h-32 md:w-40 md:h-52 lg:w-52 lg:h-64"
             glowIntensity="soft"
             animationSpeed="slow"
