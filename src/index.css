@@ -224,6 +224,15 @@
   .animate-flicker {
     animation: flicker 0.15s ease-in-out infinite alternate;
   }
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes breathe {
