@@ -31,7 +31,7 @@ const PixelImage = ({
     fast: 'animate-breathe-fast',
   }[animationSpeed];
 
-  // For moon: use circular clip and remove black background
+  // For moon: circular clip, dark-vibe glow, no black border (asset is pre-processed)
   if (isMoon) {
     return (
       <div 
@@ -44,7 +44,7 @@ const PixelImage = ({
         <div 
           className={cn(
             "relative overflow-hidden rounded-full",
-            glowClass
+            "neon-glow-moon"
           )}
           style={{
             width: '100%',
@@ -54,9 +54,9 @@ const PixelImage = ({
           <img 
             src={src} 
             alt={alt}
-            className="w-full h-full object-cover pixel-crisp scale-110"
+            className="w-full h-full object-contain pixel-crisp"
             style={{
-              filter: 'brightness(1.1) saturate(1.2)',
+              filter: 'brightness(1.05) saturate(1.15)',
             }}
           />
         </div>
