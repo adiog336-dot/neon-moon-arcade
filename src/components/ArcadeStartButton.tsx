@@ -15,62 +15,56 @@ const ArcadeStartButton = ({ onClick, disabled = false }: ArcadeStartButtonProps
     setTimeout(() => {
       setIsPressed(false);
       onClick();
-    }, 100);
+    }, 120);
   };
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={disabled}
-      className={cn(
-        "relative group cursor-pointer transition-all duration-100",
-        "px-8 py-4 md:px-12 md:py-5",
-        "border-4 border-primary",
-        "bg-gradient-to-b from-primary via-blood to-blood-dark",
-        "font-pixel text-xs md:text-sm text-primary-foreground",
-        "shadow-[inset_0_2px_0_0_hsl(0_100%_70%),inset_0_-3px_0_0_hsl(0_70%_25%)]",
-        "hover:shadow-[inset_0_2px_0_0_hsl(0_100%_75%),inset_0_-3px_0_0_hsl(0_70%_30%),0_0_30px_hsl(0_100%_50%/0.5)]",
-        "hover:border-neon-red",
-        "active:translate-y-[2px] active:shadow-[inset_0_1px_0_0_hsl(0_100%_60%),inset_0_-1px_0_0_hsl(0_70%_20%)]",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
-        isPressed && "translate-y-[2px]"
-      )}
-      style={{
-        clipPath: "polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px)",
-      }}
-    >
-      {/* Segmented pixel effect overlay */}
-      <div 
-        className="absolute inset-0 opacity-20 pointer-events-none"
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 8px,
-            hsl(0 0% 0% / 0.3) 8px,
-            hsl(0 0% 0% / 0.3) 9px
-          )`,
-        }}
-      />
-      
-      {/* Shine effect */}
-      <div 
-        className="absolute top-1 left-2 right-2 h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-60"
-      />
-
-      {/* Button text */}
-      <span className="relative z-10 tracking-widest drop-shadow-[0_2px_0_hsl(0_70%_20%)]">
-        START LISTENING
-      </span>
-
-      {/* Hover glow effect */}
-      <div 
+    <div className="relative group perspective-1000">
+      {/* 2D Button Container with Pixel Border */}
+      <button
+        onClick={handleClick}
+        disabled={disabled}
         className={cn(
-          "absolute -inset-2 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none",
-          "bg-gradient-to-r from-transparent via-primary/20 to-transparent blur-xl"
+          "relative min-w-[280px] h-16 md:min-w-[340px] md:h-20",
+          "pixel-font text-sm md:text-base tracking-[0.2em] font-bold",
+          "transition-all duration-75 ease-out uppercase",
+          "flex items-center justify-center",
+
+          /* Visual Body */
+          "bg-primary border-t-4 border-l-4 border-white/30 border-b-4 border-r-4 border-black/40",
+          "shadow-[4px_4px_0_0_rgba(0,0,0,0.5),-4px_-4px_0_0_rgba(255,255,255,0.1)]",
+
+          /* Pressed State */
+          isPressed
+            ? "translate-y-1 translate-x-1 shadow-[1px_1px_0_0_rgba(0,0,0,0.8)] border-b-2 border-r-2"
+            : "hover:-translate-y-1 hover:brightness-110 active:scale-95",
+
+          "disabled:opacity-50 disabled:cursor-not-allowed",
+          "text-white drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
         )}
-      />
-    </button>
+        style={{
+          /* Authentic pixel corner clip */
+          clipPath: `polygon(
+            4px 0, calc(100% - 4px) 0, 100% 4px, 
+            100% calc(100% - 4px), calc(100% - 4px) 100%, 
+            4px 100%, 0 calc(100% - 4px), 0 4px
+          )`
+        }}
+      >
+        {/* Inner Glare for Plastic Look */}
+        <div className="absolute top-1 left-1 right-1 h-1/2 bg-white/10 pointer-events-none" />
+
+        <span className="relative z-10 transition-transform duration-75">
+          START LISTENING
+        </span>
+      </button>
+
+      {/* Outer Glow Ring */}
+      <div className={cn(
+        "absolute -inset-1 z-[-1] opacity-0 group-hover:opacity-100 transition-opacity duration-500",
+        "bg-primary/20 blur-xl rounded-lg"
+      )} />
+    </div>
   );
 };
 

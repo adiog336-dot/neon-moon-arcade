@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import PixelImage from "./PixelImage";
 import MoonGlowLayer from "./MoonGlowLayer";
 import ArcadeStartButton from "./ArcadeStartButton";
@@ -9,10 +10,15 @@ import characterLeft from "@/assets/character-left.png";
 import characterRight from "@/assets/character-right.png";
 import heartsHealth from "@/assets/hearts-health.png";
 import star from "@/assets/star.png";
+import StarField from "./StarField";
+import Preloader from "./Preloader";
+import TitleReveal from "./TitleReveal";
+import FogLayer from "./FogLayer";
 
 const HeroScene = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(true);
 
   const handleStartClick = useCallback(() => {
     setIsLoading(true);
@@ -24,7 +30,14 @@ const HeroScene = () => {
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen px-4 py-8 overflow-hidden">
-      {/* Decorative stars - no white bg, scattered for landing vibe */}
+      {/* Preloader Overlay */}
+      {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
+
+      {/* Background Layers */}
+      <StarField />
+      <FogLayer />
+
+      {/* Decorative stars - restored original positions */}
       <img src={star} alt="" className="absolute top-[12%] left-[10%] w-8 h-8 md:w-10 md:h-10 pixel-crisp object-contain opacity-80 pointer-events-none z-0" aria-hidden />
       <img src={star} alt="" className="absolute top-[18%] right-[14%] w-6 h-6 md:w-8 md:h-8 pixel-crisp object-contain opacity-70 pointer-events-none z-0" aria-hidden />
       <img src={star} alt="" className="absolute top-[8%] right-[28%] w-5 h-5 md:w-6 md:h-6 pixel-crisp object-contain opacity-60 pointer-events-none z-0" aria-hidden />
@@ -33,20 +46,28 @@ const HeroScene = () => {
       <img src={star} alt="" className="absolute top-[10%] right-[8%] w-7 h-7 md:w-9 md:h-9 pixel-crisp object-contain opacity-75 pointer-events-none z-0" aria-hidden />
 
       {/* Main Hero Content - no title */}
-      <div className="relative flex items-center justify-center w-full max-w-6xl">
+      <div className="relative flex items-center justify-center w-full max-w-[100rem]">
         <MoonGlowLayer />
 
+        {/* Title Reveal - Behind Moon and Characters - Hidden on loading */}
+        {!isLoading && (
+          <TitleReveal
+            text="REQUIEM"
+            className="absolute top-1/2 left-1/2 -translate-x-[48%] -translate-y-[60%] z-0 scale-125 md:scale-150 lg:scale-[2]"
+          />
+        )}
+
         {/* Left Character - health bar above head + blue/red aura */}
-        <div className="absolute left-[4%] md:left-[8%] lg:left-[12%] bottom-0 md:bottom-8 z-10 character-aura-wrapper flex flex-col items-center">
+        <div className="absolute left-0 md:left-2 lg:left-4 bottom-0 md:bottom-8 z-10 character-aura-wrapper flex flex-col items-center animate-float">
           <img
             src={heartsHealth}
             alt="Health"
-            className="w-28 h-10 md:w-36 md:h-12 lg:w-44 lg:h-16 pixel-crisp object-contain mb-1 -translate-y-1"
+            className="w-36 h-12 md:w-52 md:h-16 lg:w-64 lg:h-24 pixel-crisp object-contain mb-2 -translate-y-2"
           />
           <PixelImage
             src={characterRight}
             alt="Demon character"
-            className="w-28 h-36 md:w-48 md:h-60 lg:w-60 lg:h-76"
+            className="w-52 h-64 md:w-72 md:h-96 lg:w-[26rem] lg:h-[34rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
             glowIntensity="soft"
             animationSpeed="slow"
             removeWhiteBg
@@ -58,7 +79,7 @@ const HeroScene = () => {
           <PixelImage
             src={redMoon}
             alt="Red pixel moon"
-            className="w-56 h-56 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem]"
+            className="w-80 h-80 md:w-[30rem] md:h-[30rem] lg:w-[42rem] lg:h-[42rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
             glowIntensity="strong"
             animationSpeed="normal"
             removeWhiteBg
@@ -67,16 +88,16 @@ const HeroScene = () => {
         </div>
 
         {/* Right Character - health bar on head (aligned like left) + blue/red aura */}
-        <div className="absolute right-[4%] md:right-[8%] lg:right-[12%] bottom-0 md:bottom-8 z-10 character-aura-wrapper flex flex-col items-center">
+        <div className="absolute right-0 md:right-2 lg:right-4 bottom-0 md:bottom-8 z-10 character-aura-wrapper flex flex-col items-center animate-float" style={{ animationDelay: '1s' }}>
           <img
             src={heartsHealth}
             alt="Health"
-            className="w-28 h-10 md:w-36 md:h-12 lg:w-44 lg:h-16 pixel-crisp object-contain mb-0 translate-y-6 md:translate-y-8 lg:translate-y-10 -translate-x-4 md:-translate-x-6 lg:-translate-x-8"
+            className="w-36 h-12 md:w-52 md:h-16 lg:w-64 lg:h-24 pixel-crisp object-contain absolute top-[5%] md:top-[8%] left-1/2 -translate-x-[60%] z-20"
           />
           <PixelImage
             src={characterLeft}
             alt="Sword character"
-            className="w-32 h-42 md:w-56 md:h-72 lg:w-72 lg:h-92"
+            className="w-64 h-80 md:w-96 md:h-[32rem] lg:w-[34rem] lg:h-[42rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
             glowIntensity="soft"
             animationSpeed="slow"
             removeWhiteBg
@@ -85,13 +106,13 @@ const HeroScene = () => {
       </div>
 
       {/* Controls Section */}
-      <div className="mt-8 md:mt-12 flex flex-col items-center gap-6 z-30">
+      <div className="mt-6 md:mt-10 flex flex-col items-center gap-6 z-30">
         {!isLoading ? (
           <ArcadeStartButton onClick={handleStartClick} />
         ) : (
-          <PixelLoadingBar 
-            isVisible={isLoading} 
-            onComplete={handleLoadingComplete} 
+          <PixelLoadingBar
+            isVisible={isLoading}
+            onComplete={handleLoadingComplete}
           />
         )}
       </div>

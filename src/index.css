@@ -108,7 +108,7 @@
 
   .arcade-title {
     @apply text-primary pixel-font tracking-wider;
-    text-shadow: 
+    text-shadow:
       0 0 10px hsl(var(--neon-red)),
       0 0 20px hsl(var(--neon-red)),
       0 0 40px hsl(var(--neon-red) / 0.8),
@@ -116,26 +116,20 @@
   }
 
   .neon-glow {
-    filter: drop-shadow(0 0 20px hsl(var(--neon-red) / 0.6))
-            drop-shadow(0 0 40px hsl(var(--neon-red) / 0.4));
+    filter: drop-shadow(0 0 20px hsl(var(--neon-red) / 0.6)) drop-shadow(0 0 40px hsl(var(--neon-red) / 0.4));
   }
 
   .neon-glow-strong {
-    filter: drop-shadow(0 0 30px hsl(var(--neon-red) / 0.8))
-            drop-shadow(0 0 60px hsl(var(--neon-red) / 0.6))
-            drop-shadow(0 0 90px hsl(var(--neon-red) / 0.4));
+    filter: drop-shadow(0 0 30px hsl(var(--neon-red) / 0.8)) drop-shadow(0 0 60px hsl(var(--neon-red) / 0.6)) drop-shadow(0 0 90px hsl(var(--neon-red) / 0.4));
   }
 
   .neon-glow-soft {
-    filter: drop-shadow(0 0 15px hsl(var(--neon-red) / 0.4))
-            drop-shadow(0 0 30px hsl(var(--neon-red) / 0.2));
+    filter: drop-shadow(0 0 15px hsl(var(--neon-red) / 0.4)) drop-shadow(0 0 30px hsl(var(--neon-red) / 0.2));
   }
 
   /* Moon: deeper red glow that blends with dark vibe, no harsh border */
   .neon-glow-moon {
-    filter: drop-shadow(0 0 25px hsl(0 85% 45% / 0.5))
-            drop-shadow(0 0 50px hsl(0 70% 35% / 0.35))
-            drop-shadow(0 0 80px hsl(0 60% 25% / 0.2));
+    filter: drop-shadow(0 0 25px hsl(0 85% 45% / 0.5)) drop-shadow(0 0 50px hsl(0 70% 35% / 0.35)) drop-shadow(0 0 80px hsl(0 60% 25% / 0.2));
   }
 
   /* CRT Scanlines */
@@ -143,14 +137,12 @@
     pointer-events: none;
     position: fixed;
     inset: 0;
-    background: 
-      repeating-linear-gradient(
-        0deg,
+    background:
+      repeating-linear-gradient(0deg,
         transparent,
         transparent 2px,
         rgba(0, 0, 0, 0.15) 2px,
-        rgba(0, 0, 0, 0.15) 4px
-      );
+        rgba(0, 0, 0, 0.15) 4px);
     z-index: 100;
   }
 
@@ -159,18 +151,16 @@
     pointer-events: none;
     position: fixed;
     inset: 0;
-    background: radial-gradient(
-      ellipse at center,
-      transparent 40%,
-      rgba(0, 0, 0, 0.4) 70%,
-      rgba(0, 0, 0, 0.8) 100%
-    );
+    background: radial-gradient(ellipse at center,
+        transparent 40%,
+        rgba(0, 0, 0, 0.4) 70%,
+        rgba(0, 0, 0, 0.8) 100%);
     z-index: 99;
   }
 
   /* Fog Background - red moon vibes, less flat black */
   .fog-background {
-    background: 
+    background:
       radial-gradient(ellipse 120% 80% at 50% 45%, hsl(0 60% 15% / 0.5) 0%, transparent 55%),
       radial-gradient(ellipse at 50% 80%, hsl(0 45% 10% / 0.35) 0%, transparent 50%),
       radial-gradient(ellipse at 20% 60%, hsl(0 35% 8% / 0.3) 0%, transparent 40%),
@@ -180,9 +170,7 @@
 
   /* Character sticker aura - blue + reddish glow */
   .character-aura-wrapper {
-    filter: drop-shadow(0 0 20px hsl(220 80% 60% / 0.5))
-            drop-shadow(0 0 35px hsl(0 85% 55% / 0.4))
-            drop-shadow(0 0 50px hsl(220 70% 50% / 0.25));
+    filter: drop-shadow(0 0 20px hsl(220 80% 60% / 0.5)) drop-shadow(0 0 35px hsl(0 85% 55% / 0.4)) drop-shadow(0 0 50px hsl(220 70% 50% / 0.25));
   }
 
   /* Pixel rendering for crisp edges */
@@ -202,6 +190,7 @@
 }
 
 @layer utilities {
+
   /* Breathing animation for idle floating */
   .animate-breathe {
     animation: breathe 4s ease-in-out infinite;
@@ -245,38 +234,136 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Custom Enhancements */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-twinkle-slow {
+    animation: twinkle 4s ease-in-out infinite;
+  }
+
+  .animate-twinkle-fast {
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  .requiem-title {
+    font-family: 'Press Start 2P', monospace;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+    color: #e5e7eb;
+    /* Tarnished Silver/Off-white */
+    text-shadow:
+      0 0 10px rgba(255, 0, 0, 0.8),
+      0 0 25px rgba(255, 0, 0, 0.6),
+      0 0 50px rgba(139, 0, 0, 0.4),
+      0 0 100px rgba(139, 0, 0, 0.2);
+    user-select: none;
+  }
+
+  .animate-title-reveal {
+    animation:
+      titleRevealFadeRise 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+      titleGlowPulse 4s ease-in-out 1.2s infinite;
+  }
+
+  /* Fog Drift Animation */
+  .animate-fog-drift {
+    animation: fogDrift 20s linear infinite;
+  }
+
+  .fog-particle {
+    position: absolute;
+    background: radial-gradient(circle, hsla(0, 70%, 20%, 0.3) 0%, transparent 70%);
+    filter: blur(40px);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+}
+
+@keyframes fogDrift {
+  0% {
+    transform: translateX(-10%) translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateX(10%) translateY(-5%) scale(1.1);
+  }
+
+  100% {
+    transform: translateX(-10%) translateY(0) scale(1);
+  }
+}
+
+@keyframes titleRevealFadeRise {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes titleGlowPulse {
+
+  0%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(255, 0, 0, 0.8),
+      0 0 20px rgba(255, 0, 0, 0.6),
+      0 0 40px rgba(255, 0, 0, 0.4);
+  }
+
+  50% {
+    text-shadow:
+      0 0 20px rgba(255, 0, 0, 0.9),
+      0 0 40px rgba(255, 0, 0, 0.7),
+      0 0 60px rgba(255, 0, 0, 0.5),
+      0 0 80px rgba(255, 0, 0, 0.3);
   }
 }
 
 @keyframes breathe {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1) translateY(0);
   }
+
   50% {
     transform: scale(1.03) translateY(-8px);
   }
 }
 
 @keyframes glowPulse {
-  0%, 100% {
-    filter: drop-shadow(0 0 30px hsl(0 100% 50% / 0.6))
-            drop-shadow(0 0 60px hsl(0 100% 50% / 0.4))
-            drop-shadow(0 0 90px hsl(0 100% 50% / 0.2));
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 30px hsl(0 100% 50% / 0.6)) drop-shadow(0 0 60px hsl(0 100% 50% / 0.4)) drop-shadow(0 0 90px hsl(0 100% 50% / 0.2));
   }
+
   50% {
-    filter: drop-shadow(0 0 50px hsl(0 100% 50% / 0.9))
-            drop-shadow(0 0 100px hsl(0 100% 50% / 0.6))
-            drop-shadow(0 0 150px hsl(0 100% 50% / 0.4));
+    filter: drop-shadow(0 0 50px hsl(0 100% 50% / 0.9)) drop-shadow(0 0 100px hsl(0 100% 50% / 0.6)) drop-shadow(0 0 150px hsl(0 100% 50% / 0.4));
   }
 }
 
 @keyframes auraPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.6;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.9;
     transform: scale(1.1);
@@ -287,6 +374,7 @@
   0% {
     width: 0%;
   }
+
   100% {
     width: 100%;
   }
@@ -296,9 +384,11 @@
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(0.95) translateY(2px);
   }
+
   100% {
     transform: scale(1);
   }
@@ -308,6 +398,7 @@
   0% {
     opacity: 0.97;
   }
+
   100% {
     opacity: 1;
   }
@@ -318,8 +409,35 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
   }
 }
