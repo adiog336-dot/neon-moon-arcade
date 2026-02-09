@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import PixelImage from "./PixelImage";
 import MoonGlowLayer from "./MoonGlowLayer";
+import MoonParticleFlow from "./MoonParticleFlow";
 import ArcadeStartButton from "./ArcadeStartButton";
 import PixelLoadingBar from "./PixelLoadingBar";
 import redMoon from "@/assets/red-moon.png";
@@ -14,24 +15,33 @@ import StarField from "./StarField";
 import Preloader from "./Preloader";
 import TitleReveal from "./TitleReveal";
 import FogLayer from "./FogLayer";
+import TransitionPreloader from "./TransitionPreloader";
 
 const HeroScene = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
+  const [showTransition, setShowTransition] = useState(false);
 
   const handleStartClick = useCallback(() => {
     setIsLoading(true);
   }, []);
 
   const handleLoadingComplete = useCallback(() => {
-    navigate("/home");
+    setShowTransition(true);
+  }, []);
+
+  const handleTransitionComplete = useCallback(() => {
+    navigate("/auth");
   }, [navigate]);
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen px-4 py-8 overflow-hidden">
       {/* Preloader Overlay */}
       {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
+
+      {/* Transition Preloader */}
+      {showTransition && <TransitionPreloader onComplete={handleTransitionComplete} />}
 
       {/* Background Layers */}
       <StarField />
@@ -76,6 +86,7 @@ const HeroScene = () => {
 
         {/* Center Moon - larger */}
         <div className="relative z-20">
+          <MoonParticleFlow particleCount={24} />
           <PixelImage
             src={redMoon}
             alt="Red pixel moon"
