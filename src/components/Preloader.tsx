@@ -64,7 +64,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
                     <img
                         src={guitarGif}
                         alt="Loading..."
-                        className="w-48 h-48 md:w-64 md:h-64 object-contain pixel-crisp mix-blend-screen"
+                        className="w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain pixel-crisp mix-blend-screen"
                     />
                     <div className="mt-4 text-primary pixel-font text-sm tracking-widest animate-pulse">
                         LOADING...

@@ -25,7 +25,7 @@ const ArcadeStartButton = ({ onClick, disabled = false }: ArcadeStartButtonProps
         onClick={handleClick}
         disabled={disabled}
         className={cn(
-          "relative min-w-[280px] max-w-full h-16 md:min-w-[340px] md:h-20",
+          "relative min-w-[280px] h-16 md:min-w-[340px] md:h-20",
           "pixel-font text-sm md:text-base tracking-[0.2em] font-bold",
           "transition-all duration-75 ease-out uppercase",
           "flex items-center justify-center",

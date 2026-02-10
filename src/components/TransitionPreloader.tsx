@@ -56,7 +56,7 @@ const TransitionPreloader = ({ onComplete }: TransitionPreloaderProps) => {
                         <img
                             src={mirGif}
                             alt="Loading..."
-                            className="w-48 h-48 md:w-64 md:h-64 object-contain pixel-crisp drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                            className="w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain pixel-crisp drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
                         />
                     </div>
 

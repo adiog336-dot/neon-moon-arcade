@@ -34,11 +34,14 @@ const Auth = () => {
                 const { error } = await supabase.auth.signUp({
                     email,
                     password,
+                    options: {
+                        emailRedirectTo: `${window.location.origin}/dashboard`,
+                    }
                 });
                 if (error) throw error;
                 toast({
-                    title: "Success",
-                    description: "Check your email for the confirmation link.",
+                    title: "Registration Check",
+                    description: "If this email isn't registered, a link has been sent. Please check your spam folder. Note: Free tier limits may apply (3 emails/hr).",
                 });
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
@@ -50,12 +53,13 @@ const Auth = () => {
                     title: "Logged in",
                     description: "Welcome back to the arcade!",
                 });
-                navigate("/");
+                navigate("/dashboard");
             }
         } catch (error: any) {
+            console.error("Auth Error:", error);
             toast({
-                title: "Error",
-                description: error.message,
+                title: "Auth Status",
+                description: error.message || "An unexpected error occurred. Please verify your Supabase settings.",
                 variant: "destructive",
             });
         } finally {

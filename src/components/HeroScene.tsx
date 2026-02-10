@@ -55,63 +55,58 @@ const HeroScene = () => {
       <img src={star} alt="" className="absolute top-[14%] left-[32%] w-6 h-6 md:w-7 md:h-7 pixel-crisp object-contain opacity-55 pointer-events-none z-0" aria-hidden />
       <img src={star} alt="" className="absolute top-[10%] right-[8%] w-7 h-7 md:w-9 md:h-9 pixel-crisp object-contain opacity-75 pointer-events-none z-0" aria-hidden />
 
-      {/* Main Hero Content */}
-      <div className="relative flex flex-col lg:flex-row items-center justify-center w-full max-w-[120rem] flex-1 mt-4 md:mt-0">
+      {/* Main Hero Content - no title */}
+      <div className="relative flex items-center justify-center w-full max-w-[100rem]">
+        <MoonGlowLayer />
 
-        {/* Left Character Area */}
-        <div className="order-2 lg:order-1 relative lg:absolute lg:left-0 xl:left-8 bottom-0 lg:bottom-12 z-20 flex flex-col items-center animate-float mt-4 lg:mt-0">
+        {/* Title Reveal - Behind Moon and Characters */}
+        <TitleReveal
+          text="REQUIEM"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] z-0 scale-110 md:scale-125 lg:scale-150"
+        />
+
+        {/* Left Character - health bar above head + blue/red aura */}
+        <div className="absolute left-0 md:left-2 lg:left-4 bottom-0 md:bottom-8 z-10 character-aura-wrapper flex flex-col items-center animate-float">
           <img
             src={heartsHealth}
             alt="Health"
-            className="w-28 h-10 md:w-40 md:h-14 lg:w-48 lg:h-16 pixel-crisp object-contain mb-1"
+            className="w-24 h-8 md:w-36 md:h-12 lg:w-48 lg:h-16 pixel-crisp object-contain mb-2 -translate-y-2"
           />
           <PixelImage
             src={characterRight}
             alt="Demon character"
-            className="w-40 h-48 md:w-56 md:h-72 lg:w-[20rem] lg:h-[26rem] xl:w-[24rem] xl:h-[30rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
+            className="w-40 h-52 md:w-60 md:h-80 lg:w-[22rem] lg:h-[30rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
             glowIntensity="soft"
             animationSpeed="slow"
             removeWhiteBg
           />
         </div>
 
-        {/* Center Content (Moon + Title) */}
-        <div className="order-1 lg:order-2 relative z-30 flex flex-col items-center justify-center">
-          <MoonGlowLayer />
-
-          {/* Title Reveal - Responsive scaling */}
-          {!isLoading && (
-            <TitleReveal
-              text="REQUIEM"
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[55%] z-0 scale-[1.2] md:scale-[1.8] lg:scale-[2.2] xl:scale-[2.8]"
-            />
-          )}
-
-          <div className="relative">
-            <MoonParticleFlow particleCount={20} />
-            <PixelImage
-              src={redMoon}
-              alt="Red pixel moon"
-              className="w-56 h-56 md:w-72 md:h-72 lg:w-[24rem] lg:h-[24rem] xl:w-[32rem] xl:h-[32rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
-              glowIntensity="strong"
-              animationSpeed="normal"
-              removeWhiteBg
-              isMoon
-            />
-          </div>
+        {/* Center Moon - larger */}
+        <div className="relative z-20">
+          <MoonParticleFlow particleCount={24} />
+          <PixelImage
+            src={redMoon}
+            alt="Red pixel moon"
+            className="w-64 h-64 md:w-[26rem] md:h-[26rem] lg:w-[32rem] lg:h-[32rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
+            glowIntensity="strong"
+            animationSpeed="normal"
+            removeWhiteBg
+            isMoon
+          />
         </div>
 
-        {/* Right Character Area */}
-        <div className="order-3 lg:order-3 relative lg:absolute lg:right-0 xl:right-8 bottom-0 lg:bottom-12 z-20 flex flex-col items-center animate-float mt-4 lg:mt-0" style={{ animationDelay: '1s' }}>
+        {/* Right Character - health bar on head (aligned like left) + blue/red aura */}
+        <div className="absolute right-0 md:right-2 lg:right-4 bottom-0 md:bottom-8 z-10 character-aura-wrapper flex flex-col items-center animate-float" style={{ animationDelay: '1s' }}>
           <img
             src={heartsHealth}
             alt="Health"
-            className="w-28 h-10 md:w-40 md:h-14 lg:w-48 lg:h-16 pixel-crisp object-contain mb-1"
+            className="w-24 h-8 md:w-36 md:h-12 lg:w-48 lg:h-16 pixel-crisp object-contain absolute top-[5%] md:top-[8%] left-1/2 -translate-x-[60%] z-20"
           />
           <PixelImage
             src={characterLeft}
             alt="Sword character"
-            className="w-48 h-56 md:w-64 md:h-80 lg:w-[22rem] lg:h-[28rem] xl:w-[28rem] xl:h-[34rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
+            className="w-48 h-64 md:w-80 md:h-[28rem] lg:w-[28rem] lg:h-[32rem] cursor-pointer hover:scale-105 hover:brightness-110 transition-all duration-300"
             glowIntensity="soft"
             animationSpeed="slow"
             removeWhiteBg
