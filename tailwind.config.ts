@@ -103,6 +103,20 @@ export default {
           "0%, 100%": { opacity: "0.6", transform: "scale(1)" },
           "50%": { opacity: "0.9", transform: "scale(1.1)" },
         },
+        bassPulse: {
+          "0%, 100%": {
+            transform: "scale(1)",
+            filter: "drop-shadow(0 0 20px hsl(0 100% 50% / 0.5))",
+          },
+          "15%": {
+            transform: "scale(1.1)",
+            filter: "drop-shadow(0 0 50px hsl(0 100% 50% / 0.9))",
+          },
+          "30%": {
+            transform: "scale(1)",
+            filter: "drop-shadow(0 0 20px hsl(0 100% 50% / 0.5))",
+          },
+        },
         loadingProgress: {
           "0%": { width: "0%" },
           "100%": { width: "100%" },
@@ -116,6 +130,7 @@ export default {
         "breathe-fast": "breathe 3s ease-in-out infinite",
         "glow-pulse": "glowPulse 3s ease-in-out infinite",
         "aura-pulse": "auraPulse 4s ease-in-out infinite",
+        "bass-pulse": "bassPulse 0.6s ease-out infinite",
         loading: "loadingProgress 2s ease-out forwards",
       },
     },

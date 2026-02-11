@@ -1,5 +1,4 @@
 import HeroScene from "@/components/HeroScene";
-import CRTOverlay from "@/components/CRTOverlay";
 import FogBackground from "@/components/FogBackground";
 
 const Index = () => {
@@ -8,7 +7,6 @@ const Index = () => {
       <div className="mx-auto w-full max-w-[120rem] min-h-screen relative">
         <FogBackground />
         <HeroScene />
-        <CRTOverlay />
       </div>
     </div>
   );

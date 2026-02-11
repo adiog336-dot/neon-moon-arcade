@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import gngGif from "@/assets/gng.gif";
-import CRTOverlay from "@/components/CRTOverlay";
 
 const Auth = () => {
     const [email, setEmail] = useState("");
@@ -40,8 +39,8 @@ const Auth = () => {
                 });
                 if (error) throw error;
                 toast({
-                    title: "Registration Check",
-                    description: "If this email isn't registered, a link has been sent. Please check your spam folder. Note: Free tier limits may apply (3 emails/hr).",
+                    title: "Success",
+                    description: "Check your email for the confirmation link.",
                 });
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
@@ -79,7 +78,6 @@ const Auth = () => {
                 <div className="absolute inset-0 bg-black/40" /> {/* Darken background for readability */}
             </div>
 
-            <CRTOverlay />
 
             {/* Glassmorphism Modal */}
             <div

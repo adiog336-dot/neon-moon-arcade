@@ -2,7 +2,6 @@ import TopNav from "@/components/dashboard/TopNav";
 import QuickActions from "@/components/dashboard/QuickActions";
 import ProjectsGrid from "@/components/dashboard/ProjectsGrid";
 import RecentTracks from "@/components/dashboard/RecentTracks";
-import CRTOverlay from "@/components/CRTOverlay";
 import FogBackground from "@/components/FogBackground";
 import { Moon } from "lucide-react";
 
@@ -12,8 +11,8 @@ const Dashboard = () => {
             <TopNav />
 
             <main className="relative">
-                {/* HERO STUDIO SECTION (Dark) */}
-                <section className="relative min-h-[70vh] flex flex-col items-center justify-center pt-24 pb-32 overflow-hidden px-4">
+                {/* HERO STUDIO SECTION (Dark) - Sticky Reveal */}
+                <section className="sticky top-0 h-[70vh] flex flex-col items-center justify-center pt-24 pb-32 overflow-hidden px-4 z-0">
                     <FogBackground />
 
                     {/* Decorative Studio Elements */}
@@ -43,34 +42,37 @@ const Dashboard = () => {
                     </div>
                 </section>
 
-                {/* WAVY TRANSITION DIVIDER */}
-                <div className="wavy-transition" />
+                {/* CONTENT AREA WRAPPER - Overlays the sticky hero */}
+                <div className="relative z-10 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
+                    {/* WAVY TRANSITION DIVIDER */}
+                    <div className="wavy-transition" />
 
-                {/* CONTENT AREA (Parchment) */}
-                <section className="bg-parchment pt-16 pb-24 px-4 min-h-screen">
-                    <div className="dashboard-container space-y-24">
-                        {/* Welcome Text on Parchment */}
-                        <div className="max-w-3xl space-y-4">
-                            <h2 className="pixel-font text-2xl sm:text-3xl text-parchment-dark leading-relaxed uppercase tracking-widest border-b-4 border-black/10 pb-4">
-                                CREATIVE_SUITE <br /> v2.0 WORKING_ENV
-                            </h2>
-                            <p className="text-zinc-600 font-mono text-sm leading-relaxed max-w-xl">
-                                System initialized. Projects and tracks loaded via secure link.
-                                Atmosphere stabilization: 100%. Moonlight levels optimal for production.
-                            </p>
-                        </div>
+                    {/* CONTENT AREA (Parchment) */}
+                    <section className="bg-parchment pt-16 pb-24 px-4 min-h-screen">
+                        <div className="dashboard-container space-y-24">
+                            {/* Welcome Text on Parchment */}
+                            <div className="max-w-3xl space-y-4">
+                                <h2 className="pixel-font text-2xl sm:text-3xl text-parchment-dark leading-relaxed uppercase tracking-widest border-b-4 border-black/10 pb-4">
+                                    CREATIVE_SUITE <br /> v2.0 WORKING_ENV
+                                </h2>
+                                <p className="text-zinc-600 font-mono text-sm leading-relaxed max-w-xl">
+                                    System initialized. Projects and tracks loaded via secure link.
+                                    Atmosphere stabilization: 100%. Moonlight levels optimal for production.
+                                </p>
+                            </div>
 
-                        {/* Projects & Tracks Grid on Parchment */}
-                        <div className="grid grid-cols-1 xl:grid-cols-12 gap-16">
-                            <div className="xl:col-span-12">
-                                <ProjectsGrid />
-                            </div>
-                            <div className="xl:col-span-12">
-                                <RecentTracks />
+                            {/* Projects & Tracks Grid on Parchment */}
+                            <div className="grid grid-cols-1 xl:grid-cols-12 gap-16">
+                                <div className="xl:col-span-12">
+                                    <ProjectsGrid />
+                                </div>
+                                <div className="xl:col-span-12">
+                                    <RecentTracks />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </main>
 
             {/* Footer Branding (Dark) */}
@@ -88,7 +90,6 @@ const Dashboard = () => {
                 </div>
             </footer>
 
-            <CRTOverlay />
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import guitarGif from "@/assets/upguitar.gif";
-import StarField from "./StarField";
+import PixelLoadingBar from "./PixelLoadingBar";
 
 interface PreloaderProps {
     onComplete: () => void;
@@ -9,6 +9,7 @@ interface PreloaderProps {
 
 const Preloader = ({ onComplete }: PreloaderProps) => {
     const [opening, setOpening] = useState(false);
+    const [startPulse, setStartPulse] = useState(true);
 
     useEffect(() => {
         // Start opening sequence after 2.5s
@@ -32,24 +33,24 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
             {/* Left Door - Slides Left */}
             <div
                 className={cn(
-                    "absolute left-0 top-0 bottom-0 w-1/2 bg-background z-0 transition-transform duration-1000 ease-in-out transform will-change-transform overflow-hidden",
+                    "absolute left-0 top-0 bottom-0 w-1/2 bg-blood z-0 transition-transform duration-1000 ease-in-out transform will-change-transform overflow-hidden",
                     opening ? "-translate-x-full" : "translate-x-0"
                 )}
             >
                 <div className="absolute inset-0 opacity-50">
-                    <StarField />
+                    {/* Sparkles removed */}
                 </div>
             </div>
 
             {/* Right Door - Slides Right */}
             <div
                 className={cn(
-                    "absolute right-0 top-0 bottom-0 w-1/2 bg-background z-0 transition-transform duration-1000 ease-in-out transform will-change-transform overflow-hidden",
+                    "absolute right-0 top-0 bottom-0 w-1/2 bg-blood z-0 transition-transform duration-1000 ease-in-out transform will-change-transform overflow-hidden",
                     opening ? "translate-x-full" : "translate-x-0"
                 )}
             >
                 <div className="absolute inset-0 opacity-50">
-                    <StarField />
+                    {/* Sparkles removed */}
                 </div>
             </div>
 
@@ -60,14 +61,18 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
                     opening ? "opacity-0" : "opacity-100"
                 )}
             >
-                <div className="relative flex flex-col items-center justify-center">
+                <div className="relative flex flex-col items-center justify-center animate-bass-pulse">
                     <img
                         src={guitarGif}
                         alt="Loading..."
                         className="w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain pixel-crisp mix-blend-screen"
                     />
-                    <div className="mt-4 text-primary pixel-font text-sm tracking-widest animate-pulse">
-                        LOADING...
+                    <div className="mt-8">
+                        <PixelLoadingBar
+                            isVisible={!opening}
+                            onComplete={() => { }}
+                            variant="black"
+                        />
                     </div>
                 </div>
             </div>
