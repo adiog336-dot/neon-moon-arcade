@@ -179,40 +179,40 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="relative min-h-screen bg-[hsl(var(--studio-dark))] text-white">
+        <div className="relative min-h-screen bg-[hsl(var(--studio-dark))] text-white prevent-overflow">
             {/* Character selection overlay shown right after auth */}
             {!loadingProfile && !selectedCharacter && (
-                <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-md">
-                    <div className="dashboard-container max-w-4xl">
-                        <div className="relative bg-[hsl(var(--studio-dark))] border-4 border-[hsl(var(--retro-red))] shadow-[0_0_40px_rgba(0,0,0,0.9),0_0_60px_rgba(220,38,38,0.4)] px-4 sm:px-8 py-6 sm:py-8 overflow-hidden">
+                <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-md safe-area-padding">
+                    <div className="responsive-container max-w-4xl">
+                        <div className="relative bg-[hsl(var(--studio-dark))] border-2 sm:border-4 border-[hsl(var(--retro-red))] shadow-[0_0_40px_rgba(0,0,0,0.9),0_0_60px_rgba(220,38,38,0.4)] px-3 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8 overflow-hidden">
                             {/* Scanline / glow overlay */}
                             <div className="pointer-events-none absolute inset-0 opacity-30 mix-blend-screen"
-                                 style={{
-                                     backgroundImage:
+                                style={{
+                                    backgroundImage:
                                         "repeating-linear-gradient(0deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 1px, transparent 1px, transparent 3px)"
-                                 }}
+                                }}
                             />
 
                             {/* Top status bar */}
-                            <div className="relative flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-3">
-                                    <span className="w-3 h-3 bg-[hsl(var(--retro-red))] shadow-[0_0_8px_rgba(248,113,113,0.9)]" />
-                                    <p className="pixel-font text-[9px] tracking-[0.25em] text-white/80">
+                            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                    <span className="w-2 h-2 sm:w-3 sm:h-3 bg-[hsl(var(--retro-red))] shadow-[0_0_8px_rgba(248,113,113,0.9)]" />
+                                    <p className="pixel-font text-[7px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.25em] text-white/80">
                                         PROFILE_INIT :: CHARACTER_SELECT
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-2 text-[9px] font-mono text-white/60">
+                                <div className="flex items-center gap-2 text-[7px] sm:text-[9px] font-mono text-white/60">
                                     <span>PLAYER_01</span>
-                                    <span className="h-3 w-[1px] bg-white/20" />
+                                    <span className="h-2 sm:h-3 w-[1px] bg-white/20" />
                                     <span>INSERT_CARD ▌</span>
                                 </div>
                             </div>
 
                             {/* Main layout: side preview + info */}
-                            <div className="relative grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-6 sm:gap-8 items-center">
+                            <div className="relative grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-4 sm:gap-6 md:gap-8 items-center">
                                 {/* Character preview area */}
                                 <div className="relative flex flex-col items-center">
-                                    <div className="relative w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 border-4 border-white/40 bg-black/80 flex items-center justify-center overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+                                    <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 border-2 sm:border-4 border-white/40 bg-black/80 flex items-center justify-center overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.9)]">
                                         <PixelImage
                                             src={activeCharacter.image}
                                             alt={activeCharacter.name}
@@ -222,29 +222,29 @@ const Dashboard = () => {
                                         />
 
                                         {/* Bottom name plate */}
-                                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 border-t border-white/20 px-3 py-1.5 flex items-center justify-between">
-                                            <span className="pixel-font text-[9px] text-[hsl(var(--retro-red))] tracking-[0.2em]">
+                                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 border-t border-white/20 px-2 sm:px-3 py-1 sm:py-1.5 flex items-center justify-between">
+                                            <span className="pixel-font text-[7px] sm:text-[9px] text-[hsl(var(--retro-red))] tracking-[0.15em] sm:tracking-[0.2em]">
                                                 {activeCharacter.name}
                                             </span>
-                                            <span className="text-[9px] font-mono text-white/60">
+                                            <span className="text-[7px] sm:text-[9px] font-mono text-white/60">
                                                 LVL_01
                                             </span>
                                         </div>
                                     </div>
 
                                     {/* Navigation hints */}
-                                    <div className="mt-4 flex items-center gap-4 text-[9px] font-mono text-white/60">
+                                    <div className="mt-3 sm:mt-4 flex items-center gap-3 sm:gap-4 text-[8px] sm:text-[9px] font-mono text-white/60">
                                         <button
                                             type="button"
                                             onClick={handlePrev}
-                                            className="px-2 py-1 border border-white/40 bg-white/5 pixel-font text-[9px] hover:bg-white/15 active:translate-y-[1px] transition"
+                                            className="touch-target px-3 py-2 border border-white/40 bg-white/5 pixel-font text-[8px] sm:text-[9px] hover:bg-white/15 active:translate-y-[1px] transition"
                                         >
                                             ◀ PREV
                                         </button>
                                         <button
                                             type="button"
                                             onClick={handleNext}
-                                            className="px-2 py-1 border border-white/40 bg-white/5 pixel-font text-[9px] hover:bg-white/15 active:translate-y-[1px] transition"
+                                            className="touch-target px-3 py-2 border border-white/40 bg-white/5 pixel-font text-[8px] sm:text-[9px] hover:bg-white/15 active:translate-y-[1px] transition"
                                         >
                                             NEXT ▶
                                         </button>
@@ -252,16 +252,16 @@ const Dashboard = () => {
                                 </div>
 
                                 {/* Right-hand character info panel */}
-                                <div className="relative bg-parchment text-parchment-dark border-2 border-black shadow-[6px_6px_0_rgba(0,0,0,1)] px-4 py-4 sm:px-5 sm:py-5">
-                                    <p className="pixel-font text-[10px] tracking-[0.25em] mb-3">
+                                <div className="relative bg-parchment text-parchment-dark border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] sm:shadow-[6px_6px_0_rgba(0,0,0,1)] px-3 sm:px-4 md:px-5 py-3 sm:py-4 md:py-5">
+                                    <p className="pixel-font text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] mb-2 sm:mb-3">
                                         CHARACTER_INFO
                                     </p>
 
-                                    <p className="text-[9px] font-mono leading-relaxed mb-4">
+                                    <p className="text-[8px] sm:text-[9px] font-mono leading-relaxed mb-3 sm:mb-4">
                                         {activeCharacter.description}
                                     </p>
 
-                                    <div className="space-y-2 text-[9px] font-mono">
+                                    <div className="space-y-1.5 sm:space-y-2 text-[8px] sm:text-[9px] font-mono">
                                         <p>
                                             ROLE: <span className="font-bold">{activeCharacter.role}</span>
                                         </p>
@@ -273,18 +273,18 @@ const Dashboard = () => {
                                         </p>
                                     </div>
 
-                                    <p className="mt-4 text-[8px] font-mono text-parchment-dark/80 text-right">
+                                    <p className="mt-3 sm:mt-4 text-[7px] sm:text-[8px] font-mono text-parchment-dark/80 text-right">
                                         USE ◀ / ▶ TO BROWSE AVATARS
                                     </p>
                                 </div>
                             </div>
 
                             {/* Confirm button outside of the info box */}
-                            <div className="relative mt-5 flex justify-end">
+                            <div className="relative mt-4 sm:mt-5 flex justify-end">
                                 <button
                                     type="button"
                                     onClick={handleConfirmSelection}
-                                    className="bg-[hsl(var(--retro-red))] text-white pixel-font text-[11px] px-6 py-2 border-2 border-black shadow-[3px_3px_0_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] active:shadow-none transition"
+                                    className="touch-target bg-[hsl(var(--retro-red))] text-white pixel-font text-[9px] sm:text-[11px] px-4 sm:px-6 py-2 border-2 border-black shadow-[3px_3px_0_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] active:shadow-none transition"
                                 >
                                     CONFIRM_SELECTION
                                 </button>
@@ -296,7 +296,7 @@ const Dashboard = () => {
 
             <main className="relative">
                 {/* HERO SECTION with custom GIF background (no navbar, no console panel) */}
-                <section className="relative sticky top-0 h-[70vh] flex flex-col items-center justify-center overflow-hidden px-0 z-0">
+                <section className="relative sticky top-0 h-[60vh] sm:h-[70vh] flex flex-col items-center justify-center overflow-hidden px-0 z-0">
                     {/* Rani GIF background */}
                     <div className="absolute inset-0 -z-10">
                         <img
@@ -307,7 +307,7 @@ const Dashboard = () => {
                         <div className="absolute inset-0 bg-black/20" />
                     </div>
 
-                    {/* Decorative Studio Elements (kept for vibe) */}
+                    {/* Decorative Studio Elements (kept for vibe) - hidden on mobile */}
                     <div className="absolute top-[20%] left-[10%] opacity-20 hidden lg:block">
                         <div className="w-32 h-48 bg-zinc-800 border-4 border-zinc-700 rounded-lg shadow-2xl flex flex-col items-center p-4">
                             <div className="w-20 h-20 rounded-full border-4 border-zinc-600 mb-4" />
@@ -324,35 +324,35 @@ const Dashboard = () => {
                     </div>
 
                     {/* Moon accent */}
-                    <div className="absolute top-32 left-[15%] text-yellow-200/40">
-                        <Moon className="w-16 h-16 fill-current blur-[2px]" />
+                    <div className="absolute top-20 sm:top-32 left-[10%] sm:left-[15%] text-yellow-200/40">
+                        <Moon className="w-12 h-12 sm:w-16 sm:h-16 fill-current blur-[2px]" />
                     </div>
                 </section>
 
                 {/* SLIDE 1: CONTENT AREA WRAPPER - connects to hero with wavy parchment border */}
-                <div className="relative z-10 -mt-16 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
+                <div className="relative z-10 -mt-12 sm:-mt-16 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
                     {/* WAVY TRANSITION DIVIDER (continues the curvy parchment edge) */}
                     <div className="wavy-transition" />
 
                     {/* SLIDE 1 (Parchment) - background only, ready for content */}
-                    <section className="bg-parchment pt-16 pb-24 px-4 min-h-screen -mt-1">
-                        <div className="dashboard-container" />
+                    <section className="bg-parchment section-padding-y px-4 min-h-screen -mt-1">
+                        <div className="responsive-container" />
                     </section>
                 </div>
 
                 {/* SLIDE 2 */}
                 <div className="relative z-10 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
                     <div className="wavy-transition wavy-transition--navy" />
-                    <section className="pt-16 pb-24 px-4 min-h-screen -mt-1 bg-[#3E4462]">
-                        <div className="dashboard-container" />
+                    <section className="section-padding-y px-4 min-h-screen -mt-1 bg-[#3E4462]">
+                        <div className="responsive-container" />
                     </section>
                 </div>
 
                 {/* SLIDE 3 */}
                 <div className="relative z-10 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
                     <div className="wavy-transition wavy-transition--teal" />
-                    <section className="pt-16 pb-24 px-4 min-h-screen -mt-1 bg-[#59AC99]">
-                        <div className="dashboard-container" />
+                    <section className="section-padding-y px-4 min-h-screen -mt-1 bg-[#59AC99]">
+                        <div className="responsive-container" />
                     </section>
                 </div>
             </main>
