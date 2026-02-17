@@ -298,16 +298,16 @@ const Dashboard = () => {
             )}
 
             <main className="relative">
-                {/* HERO SECTION with custom GIF background - FIXED so it stays in place */}
-                <section className="fixed top-0 left-0 w-full h-[60vh] sm:h-[70vh] flex flex-col items-center justify-center overflow-hidden px-0 z-0">
+                {/* HERO SECTION with custom GIF background - FIXED FULL SCREEN */}
+                <section className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden px-0 z-0">
                     {/* Rani GIF background */}
-                    <div className="absolute inset-0 -z-10">
+                    <div className="absolute inset-0">
                         <img
                             src={raniGif}
                             alt="Hero background"
-                            className="w-full h-full object-cover object-bottom"
+                            className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-black/20" />
+                        <div className="absolute inset-0 bg-black/40" />
                     </div>
 
                     {/* Decorative Studio Elements (kept for vibe) - hidden on mobile */}
@@ -332,12 +332,11 @@ const Dashboard = () => {
                     </div>
                 </section>
 
-                {/* Spacer to allow scrolling past the fixed hero */}
-                <div className="h-[60vh] sm:h-[70vh]" />
+                {/* Vertical scroll space before content section */}
+                <div className="h-screen w-full relative pointer-events-none" />
 
-                {/* SLIDE 1: CONTENT AREA WRAPPER */}
-                <div className="relative z-10">
-
+                {/* CONTENT AREA WRAPPER */}
+                <div className="relative z-10 w-full">
                     <div className="absolute top-24 sm:top-32 left-0 z-20 pointer-events-none">
                         <div className="pointer-events-auto scale-75 sm:scale-90 md:scale-100 origin-left">
                             <ProfileCard
@@ -348,16 +347,13 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <section className="bg-[hsl(var(--studio-dark))] section-padding-y min-h-screen -mt-1">
+                    <section className="bg-black/10 backdrop-blur-2xl border-t border-white/10 section-padding-y min-h-screen">
                         <div className="responsive-container pt-20 sm:pt-32">
                             {/* Rest of the content area */}
                         </div>
                     </section>
                 </div>
-
-
             </main>
-
         </div>
     );
 };
