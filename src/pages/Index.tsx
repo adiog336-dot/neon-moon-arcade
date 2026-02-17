@@ -1,3 +1,4 @@
+
 import HeroScene from "@/components/HeroScene";
 import FogBackground from "@/components/FogBackground";
 

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import Navbar from "@/components/Navbar";
 import PixelImage from "@/components/PixelImage";
+import ProfileCard from "@/components/ProfileCard";
 import fireGif from "@/assets/fire.gif";
 import peaceGif from "@/assets/peace.gif";
 import umbrellaGif from "@/assets/umbrella.gif";
@@ -180,6 +182,7 @@ const Dashboard = () => {
 
     return (
         <div className="relative min-h-screen bg-[hsl(var(--studio-dark))] text-white prevent-overflow">
+            <Navbar />
             {/* Character selection overlay shown right after auth */}
             {!loadingProfile && !selectedCharacter && (
                 <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-md safe-area-padding">
@@ -295,8 +298,8 @@ const Dashboard = () => {
             )}
 
             <main className="relative">
-                {/* HERO SECTION with custom GIF background (no navbar, no console panel) */}
-                <section className="relative sticky top-0 h-[60vh] sm:h-[70vh] flex flex-col items-center justify-center overflow-hidden px-0 z-0">
+                {/* HERO SECTION with custom GIF background - FIXED so it stays in place */}
+                <section className="fixed top-0 left-0 w-full h-[60vh] sm:h-[70vh] flex flex-col items-center justify-center overflow-hidden px-0 z-0">
                     {/* Rani GIF background */}
                     <div className="absolute inset-0 -z-10">
                         <img
@@ -329,32 +332,30 @@ const Dashboard = () => {
                     </div>
                 </section>
 
-                {/* SLIDE 1: CONTENT AREA WRAPPER - connects to hero with wavy parchment border */}
-                <div className="relative z-10 -mt-12 sm:-mt-16 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
-                    {/* WAVY TRANSITION DIVIDER (continues the curvy parchment edge) */}
-                    <div className="wavy-transition" />
+                {/* Spacer to allow scrolling past the fixed hero */}
+                <div className="h-[60vh] sm:h-[70vh]" />
 
-                    {/* SLIDE 1 (Parchment) - background only, ready for content */}
-                    <section className="bg-parchment section-padding-y px-4 min-h-screen -mt-1">
-                        <div className="responsive-container" />
+                {/* SLIDE 1: CONTENT AREA WRAPPER */}
+                <div className="relative z-10">
+
+                    <div className="absolute top-24 sm:top-32 left-0 z-20 pointer-events-none">
+                        <div className="pointer-events-auto scale-75 sm:scale-90 md:scale-100 origin-left">
+                            <ProfileCard
+                                characterId={selectedCharacter || undefined}
+                                characterImage={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.image : undefined}
+                                characterName={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.name : undefined}
+                            />
+                        </div>
+                    </div>
+
+                    <section className="bg-[hsl(var(--studio-dark))] section-padding-y min-h-screen -mt-1">
+                        <div className="responsive-container pt-20 sm:pt-32">
+                            {/* Rest of the content area */}
+                        </div>
                     </section>
                 </div>
 
-                {/* SLIDE 2 */}
-                <div className="relative z-10 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
-                    <div className="wavy-transition wavy-transition--navy" />
-                    <section className="section-padding-y px-4 min-h-screen -mt-1 bg-[#3E4462]">
-                        <div className="responsive-container" />
-                    </section>
-                </div>
 
-                {/* SLIDE 3 */}
-                <div className="relative z-10 shadow-[0_-15px_60px_rgba(0,0,0,0.8)]">
-                    <div className="wavy-transition wavy-transition--teal" />
-                    <section className="section-padding-y px-4 min-h-screen -mt-1 bg-[#59AC99]">
-                        <div className="responsive-container" />
-                    </section>
-                </div>
             </main>
 
         </div>

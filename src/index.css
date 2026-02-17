@@ -358,6 +358,14 @@
     background-image: radial-gradient(circle at 16px -16px, transparent 20px, #59AC99 21px);
   }
 
+  .wavy-transition--dark {
+    background-color: hsl(var(--studio-dark));
+  }
+
+  .wavy-transition--dark::before {
+    background-image: radial-gradient(circle at 16px -16px, transparent 20px, hsl(var(--studio-dark)) 21px);
+  }
+
   .retro-content-card {
     background-color: rgba(255, 255, 255, 0.4);
     border: 2px solid hsl(var(--parchment-border));
@@ -384,31 +392,38 @@
 
   /* Responsive Typography - Fluid scaling */
   .text-responsive-xs {
-    font-size: clamp(0.625rem, 1.5vw, 0.75rem); /* 10px - 12px */
+    font-size: clamp(0.625rem, 1.5vw, 0.75rem);
+    /* 10px - 12px */
   }
 
   .text-responsive-sm {
-    font-size: clamp(0.75rem, 2vw, 0.875rem); /* 12px - 14px */
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
+    /* 12px - 14px */
   }
 
   .text-responsive-base {
-    font-size: clamp(0.875rem, 2.5vw, 1rem); /* 14px - 16px */
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+    /* 14px - 16px */
   }
 
   .text-responsive-lg {
-    font-size: clamp(1rem, 3vw, 1.25rem); /* 16px - 20px */
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    /* 16px - 20px */
   }
 
   .text-responsive-xl {
-    font-size: clamp(1.25rem, 4vw, 1.5rem); /* 20px - 24px */
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    /* 20px - 24px */
   }
 
   .text-responsive-2xl {
-    font-size: clamp(1.5rem, 5vw, 2rem); /* 24px - 32px */
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    /* 24px - 32px */
   }
 
   .text-responsive-3xl {
-    font-size: clamp(1.875rem, 6vw, 3rem); /* 30px - 48px */
+    font-size: clamp(1.875rem, 6vw, 3rem);
+    /* 30px - 48px */
   }
 
   /* Touch-friendly interactive elements */
@@ -455,6 +470,7 @@
 
   /* Mobile-optimized animations (reduced motion) */
   @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -487,6 +503,39 @@
     padding-right: max(1rem, env(safe-area-inset-right));
     padding-top: max(1rem, env(safe-area-inset-top));
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  /* Sticky Scroll Effect - Sections overlay each other */
+  .sticky-section {
+    position: sticky;
+    top: 0;
+    width: 100%;
+  }
+
+  .sticky-overlay-section {
+    position: relative;
+    /* Each section covers the previous one as you scroll */
+    margin-top: -100vh;
+    padding-top: 100vh;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Optional: Add scroll snap for precise section transitions */
+  @media (min-width: 768px) {
+    .scroll-snap-container {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100vh;
+    }
+
+    .scroll-snap-section {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
   }
 }
 
