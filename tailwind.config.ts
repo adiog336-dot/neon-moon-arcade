@@ -121,6 +121,14 @@ export default {
           "0%": { width: "0%" },
           "100%": { width: "100%" },
         },
+        fadeIn: {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        slideUpFade: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -132,6 +140,8 @@ export default {
         "aura-pulse": "auraPulse 4s ease-in-out infinite",
         "bass-pulse": "bassPulse 0.6s ease-out infinite",
         loading: "loadingProgress 2s ease-out forwards",
+        "fade-in": "fadeIn 1s ease-out forwards",
+        "slide-up-fade": "slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       },
     },
   },

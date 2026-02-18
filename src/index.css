@@ -139,6 +139,10 @@
     filter: drop-shadow(0 0 15px hsl(var(--neon-red) / 0.4)) drop-shadow(0 0 30px hsl(var(--neon-red) / 0.2));
   }
 
+  .text-glow-red {
+    text-shadow: 0 0 10px hsl(var(--retro-red) / 0.8), 0 0 20px hsl(var(--retro-red) / 0.4);
+  }
+
   /* Moon: deeper red glow that blends with dark vibe, no harsh border */
   .neon-glow-moon {
     filter: drop-shadow(0 0 25px hsl(0 85% 45% / 0.5)) drop-shadow(0 0 50px hsl(0 70% 35% / 0.35)) drop-shadow(0 0 80px hsl(0 60% 25% / 0.2));
@@ -666,6 +670,22 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
 }
 
 @keyframes float {

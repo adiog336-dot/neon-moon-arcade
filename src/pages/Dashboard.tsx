@@ -43,6 +43,7 @@ const Dashboard = () => {
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [loadingProfile, setLoadingProfile] = useState(true);
+    const [userName, setUserName] = useState("PLAYER");
 
     const activeCharacter = characters[activeIndex];
 
@@ -83,6 +84,12 @@ const Dashboard = () => {
                         }
                     }
                     return;
+                }
+
+                // Set user name
+                if (isMounted) {
+                    const name = user.user_metadata?.name || user.email?.split("@")[0] || "PLAYER";
+                    setUserName(name.toUpperCase());
                 }
 
                 const localKey = `nm-character-${user.id}`;
@@ -335,9 +342,8 @@ const Dashboard = () => {
                 {/* Vertical scroll space before content section */}
                 <div className="h-screen w-full relative pointer-events-none" />
 
-                {/* CONTENT AREA WRAPPER */}
                 <div className="relative z-10 w-full">
-                    <div className="absolute top-24 sm:top-32 left-0 z-20 pointer-events-none">
+                    <div className="absolute top-24 sm:top-32 left-0 z-20 pointer-events-none w-full flex items-center gap-6 sm:gap-10 pl-2 sm:pl-6 md:pl-10">
                         <div className="pointer-events-auto scale-75 sm:scale-90 md:scale-100 origin-left">
                             <ProfileCard
                                 characterId={selectedCharacter || undefined}
@@ -345,6 +351,28 @@ const Dashboard = () => {
                                 characterName={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.name : undefined}
                             />
                         </div>
+
+                        {/* Welcome message next to ProfileCard */}
+                        <div className="pointer-events-auto hidden lg:flex flex-col items-center justify-center flex-1 pr-10">
+                            <div className="max-w-5xl text-center space-y-10 animate-breathe">
+                                <h1 className="pixel-font font-bold text-white text-[32px] md:text-[48px] lg:text-[64px] xl:text-[80px] tracking-tighter drop-shadow-[0_0_40px_rgba(255,255,255,0.5)] animate-slide-up-fade opacity-0">
+                                    WELCOME <span className="text-[hsl(var(--blood-red))] text-glow-red">{userName}</span>,
+                                </h1>
+                                <p className="pixel-font font-bold text-white/95 text-[14px] md:text-[18px] lg:text-[24px] xl:text-[28px] leading-[1.6] tracking-widest animate-slide-up-fade opacity-0 delay-300 max-w-4xl mx-auto">
+                                    You've entered your collaborative music studio — a space where you can build albums with others, exchange playlists, attach memories to songs, and create bonds through sound. Your vibe isn't just played here — it's shared.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Mobile/Tablet welcome message - centered below card */}
+                    <div className="lg:hidden absolute top-[440px] left-0 w-full px-6 z-20 pointer-events-auto flex flex-col items-center text-center animate-breathe">
+                        <h1 className="pixel-font font-bold text-white text-[22px] sm:text-[28px] tracking-tight mb-6 animate-slide-up-fade opacity-0">
+                            WELCOME <span className="text-[hsl(var(--blood-red))]">{userName}</span>,
+                        </h1>
+                        <p className="pixel-font font-bold text-white/90 text-[12px] sm:text-[14px] leading-relaxed max-w-lg animate-slide-up-fade opacity-0 delay-300">
+                            You've entered your collaborative music studio — a space where you can build albums with others, exchange playlists, attach memories to songs, and create bonds through sound. Your vibe isn't just played here — it's shared.
+                        </p>
                     </div>
 
                     <section className="bg-black/10 backdrop-blur-2xl border-t border-white/10 section-padding-y min-h-screen">
