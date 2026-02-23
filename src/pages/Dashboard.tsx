@@ -39,13 +39,25 @@ const characters = [
     },
 ];
 
+import AlbumsView from "@/components/AlbumsView";
+
 const Dashboard = () => {
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [userName, setUserName] = useState("PLAYER");
+    const [activeView, setActiveView] = useState("home"); // "home" or "albums"
 
     const activeCharacter = characters[activeIndex];
+
+    // Load from URL if present
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const view = params.get("view");
+        if (view === "albums") {
+            setActiveView("albums");
+        }
+    }, []);
 
     // Load previously selected character for this user (by Supabase user id),
     // with a localStorage fallback so the choice sticks for the same account.
@@ -189,7 +201,7 @@ const Dashboard = () => {
 
     return (
         <div className="relative min-h-screen bg-[hsl(var(--studio-dark))] text-white prevent-overflow">
-            <Navbar />
+            <Navbar activeView={activeView} onNavigate={setActiveView} />
             {/* Character selection overlay shown right after auth */}
             {!loadingProfile && !selectedCharacter && (
                 <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-md safe-area-padding">
@@ -305,82 +317,90 @@ const Dashboard = () => {
             )}
 
             <main className="relative">
-                {/* HERO SECTION with custom GIF background - FIXED FULL SCREEN */}
-                <section className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden px-0 z-0">
-                    {/* Rani GIF background */}
-                    <div className="absolute inset-0">
-                        <img
-                            src={raniGif}
-                            alt="Hero background"
-                            className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/40" />
-                    </div>
+                {activeView === "home" ? (
+                    <>
+                        {/* HERO SECTION with custom GIF background - FIXED FULL SCREEN */}
+                        <section className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden px-0 z-0">
+                            {/* Rani GIF background */}
+                            <div className="absolute inset-0">
+                                <img
+                                    src={raniGif}
+                                    alt="Hero background"
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black/40" />
+                            </div>
 
-                    {/* Decorative Studio Elements (kept for vibe) - hidden on mobile */}
-                    <div className="absolute top-[20%] left-[10%] opacity-20 hidden lg:block">
-                        <div className="w-32 h-48 bg-zinc-800 border-4 border-zinc-700 rounded-lg shadow-2xl flex flex-col items-center p-4">
-                            <div className="w-20 h-20 rounded-full border-4 border-zinc-600 mb-4" />
-                            <div className="w-16 h-1 bg-zinc-600 rounded mb-2" />
-                            <div className="w-16 h-1 bg-zinc-600 rounded" />
-                        </div>
-                    </div>
-                    <div className="absolute top-[20%] right-[10%] opacity-20 hidden lg:block">
-                        <div className="w-32 h-48 bg-zinc-800 border-4 border-zinc-700 rounded-lg shadow-2xl flex flex-col items-center p-4">
-                            <div className="w-20 h-20 rounded-full border-4 border-zinc-600 mb-4" />
-                            <div className="w-16 h-1 bg-zinc-600 rounded mb-2" />
-                            <div className="w-16 h-1 bg-zinc-600 rounded" />
-                        </div>
-                    </div>
+                            {/* Decorative Studio Elements (kept for vibe) - hidden on mobile */}
+                            <div className="absolute top-[20%] left-[10%] opacity-20 hidden lg:block">
+                                <div className="w-32 h-48 bg-zinc-800 border-4 border-zinc-700 rounded-lg shadow-2xl flex flex-col items-center p-4">
+                                    <div className="w-20 h-20 rounded-full border-4 border-zinc-600 mb-4" />
+                                    <div className="w-16 h-1 bg-zinc-600 rounded mb-2" />
+                                    <div className="w-16 h-1 bg-zinc-600 rounded" />
+                                </div>
+                            </div>
+                            <div className="absolute top-[20%] right-[10%] opacity-20 hidden lg:block">
+                                <div className="w-32 h-48 bg-zinc-800 border-4 border-zinc-700 rounded-lg shadow-2xl flex flex-col items-center p-4">
+                                    <div className="w-20 h-20 rounded-full border-4 border-zinc-600 mb-4" />
+                                    <div className="w-16 h-1 bg-zinc-600 rounded mb-2" />
+                                    <div className="w-16 h-1 bg-zinc-600 rounded" />
+                                </div>
+                            </div>
 
-                    {/* Moon accent */}
-                    <div className="absolute top-20 sm:top-32 left-[10%] sm:left-[15%] text-yellow-200/40">
-                        <Moon className="w-12 h-12 sm:w-16 sm:h-16 fill-current blur-[2px]" />
-                    </div>
-                </section>
+                            {/* Moon accent */}
+                            <div className="absolute top-20 sm:top-32 left-[10%] sm:left-[15%] text-yellow-200/40">
+                                <Moon className="w-12 h-12 sm:w-16 sm:h-16 fill-current blur-[2px]" />
+                            </div>
+                        </section>
 
-                {/* Vertical scroll space before content section */}
-                <div className="h-screen w-full relative pointer-events-none" />
+                        {/* Vertical scroll space before content section */}
+                        <div className="h-screen w-full relative pointer-events-none" />
 
-                <div className="relative z-10 w-full">
-                    <div className="absolute top-24 sm:top-32 left-0 z-20 pointer-events-none w-full flex items-center gap-6 sm:gap-10 pl-2 sm:pl-6 md:pl-10">
-                        <div className="pointer-events-auto scale-75 sm:scale-90 md:scale-100 origin-left">
-                            <ProfileCard
-                                characterId={selectedCharacter || undefined}
-                                characterImage={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.image : undefined}
-                                characterName={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.name : undefined}
-                            />
-                        </div>
+                        <div className="relative z-10 w-full">
+                            <div className="absolute top-24 sm:top-32 left-0 z-20 pointer-events-none w-full flex items-center gap-6 sm:gap-10 pl-2 sm:pl-6 md:pl-10">
+                                <div className="pointer-events-auto scale-65 sm:scale-75 md:scale-85 origin-left">
+                                    <ProfileCard
+                                        characterId={selectedCharacter || undefined}
+                                        characterImage={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.image : undefined}
+                                        characterName={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.name : undefined}
+                                    />
+                                </div>
 
-                        {/* Welcome message next to ProfileCard */}
-                        <div className="pointer-events-auto hidden lg:flex flex-col items-center justify-center flex-1 pr-10">
-                            <div className="max-w-5xl text-center space-y-10 animate-breathe">
-                                <h1 className="pixel-font font-bold text-white text-[32px] md:text-[48px] lg:text-[64px] xl:text-[80px] tracking-tighter drop-shadow-[0_0_40px_rgba(255,255,255,0.5)] animate-slide-up-fade opacity-0">
-                                    WELCOME <span className="text-[hsl(var(--blood-red))] text-glow-red">{userName}</span>,
+                                {/* Welcome message next to ProfileCard */}
+                                <div className="pointer-events-auto hidden lg:flex flex-col items-center justify-center flex-1 pr-10">
+                                    <div className="max-w-5xl text-center space-y-10 animate-breathe">
+                                        <h1 className="pixel-font font-bold text-white text-[24px] md:text-[32px] lg:text-[40px] xl:text-[52px] tracking-tighter drop-shadow-[0_0_40px_rgba(255,255,255,0.5)] animate-slide-up-fade opacity-0">
+                                            WELCOME <span className="text-[hsl(var(--blood-red))] text-glow-red">{userName}</span>,
+                                        </h1>
+                                        <p className="pixel-font font-bold text-white/95 text-[11px] md:text-[13px] lg:text-[15px] xl:text-[18px] leading-[1.8] tracking-widest animate-slide-up-fade opacity-0 delay-300 max-w-3xl mx-auto">
+                                            You've entered your collaborative music studio — a space where you can build albums with others, exchange playlists, attach memories to songs, and create bonds through sound. Your vibe isn't just played here — it's shared.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Mobile/Tablet welcome message - centered below card */}
+                            <div className="lg:hidden absolute top-[440px] left-0 w-full px-6 z-20 pointer-events-auto flex flex-col items-center text-center animate-breathe">
+                                <h1 className="pixel-font font-bold text-white text-[22px] sm:text-[28px] tracking-tight mb-6 animate-slide-up-fade opacity-0">
+                                    WELCOME <span className="text-[hsl(var(--blood-red))]">{userName}</span>,
                                 </h1>
-                                <p className="pixel-font font-bold text-white/95 text-[14px] md:text-[18px] lg:text-[24px] xl:text-[28px] leading-[1.6] tracking-widest animate-slide-up-fade opacity-0 delay-300 max-w-4xl mx-auto">
+                                <p className="pixel-font font-bold text-white/90 text-[12px] sm:text-[14px] leading-relaxed max-w-lg animate-slide-up-fade opacity-0 delay-300">
                                     You've entered your collaborative music studio — a space where you can build albums with others, exchange playlists, attach memories to songs, and create bonds through sound. Your vibe isn't just played here — it's shared.
                                 </p>
                             </div>
-                        </div>
-                    </div>
 
-                    {/* Mobile/Tablet welcome message - centered below card */}
-                    <div className="lg:hidden absolute top-[440px] left-0 w-full px-6 z-20 pointer-events-auto flex flex-col items-center text-center animate-breathe">
-                        <h1 className="pixel-font font-bold text-white text-[22px] sm:text-[28px] tracking-tight mb-6 animate-slide-up-fade opacity-0">
-                            WELCOME <span className="text-[hsl(var(--blood-red))]">{userName}</span>,
-                        </h1>
-                        <p className="pixel-font font-bold text-white/90 text-[12px] sm:text-[14px] leading-relaxed max-w-lg animate-slide-up-fade opacity-0 delay-300">
-                            You've entered your collaborative music studio — a space where you can build albums with others, exchange playlists, attach memories to songs, and create bonds through sound. Your vibe isn't just played here — it's shared.
-                        </p>
-                    </div>
-
-                    <section className="bg-black/10 backdrop-blur-2xl border-t border-white/10 section-padding-y min-h-screen">
-                        <div className="responsive-container pt-20 sm:pt-32">
-                            {/* Rest of the content area */}
+                            <section className="bg-black/10 backdrop-blur-2xl border-t border-white/10 section-padding-y min-h-screen">
+                                <div className="responsive-container pt-20 sm:pt-32">
+                                    {/* Rest of the content area */}
+                                </div>
+                            </section>
                         </div>
-                    </section>
-                </div>
+                    </>
+                ) : (
+                    <div className="pt-20">
+                        <AlbumsView onBack={() => setActiveView("home")} />
+                    </div>
+                )}
             </main>
         </div>
     );

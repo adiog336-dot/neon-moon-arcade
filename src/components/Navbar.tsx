@@ -14,9 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 
-const Navbar = () => {
+interface NavbarProps {
+    activeView?: string;
+    onNavigate?: (view: string) => void;
+}
+
+const Navbar = ({ activeView = "home", onNavigate }: NavbarProps) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -34,12 +40,19 @@ const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: "Home", path: "/dashboard" },
-        { name: "Workspace", path: "/workspace" },
-        { name: "Albums", path: "/albums" },
-        { name: "Collabs", path: "/collabs" },
-        { name: "Bond Report", path: "/bond-report" },
+        { name: "Home", path: "/dashboard", view: "home" },
+        { name: "Workspace", path: "/workspace", view: "workspace" },
+        { name: "Albums", path: "/dashboard?view=albums", view: "albums" },
+        { name: "Collabs", path: "/collabs", view: "collabs" },
+        { name: "Bond Report", path: "/bond-report", view: "bond-report" },
     ];
+
+    const handleLinkClick = (e: React.MouseEvent, item: typeof navLinks[0]) => {
+        if (onNavigate && item.view && (item.path.startsWith("/dashboard") || item.view === "home")) {
+            e.preventDefault();
+            onNavigate(item.view);
+        }
+    };
 
     return (
         <nav
@@ -65,10 +78,17 @@ const Navbar = () => {
                         <Link
                             key={item.name}
                             to={item.path}
-                            className="text-sm font-medium text-gray-300 transition-all hover:text-white relative group py-1"
+                            onClick={(e) => handleLinkClick(e, item)}
+                            className={cn(
+                                "text-sm font-medium transition-all hover:text-white relative group py-1",
+                                activeView === item.view ? "text-white" : "text-gray-300"
+                            )}
                         >
                             {item.name}
-                            <span className="absolute -bottom-1 left-1/2 w-0 h-[2px] bg-primary -translate-x-1/2 transition-all group-hover:w-full duration-300 shadow-[0_0_8px_rgba(var(--primary),0.8)]" />
+                            <span className={cn(
+                                "absolute -bottom-1 left-1/2 h-[2px] bg-primary -translate-x-1/2 transition-all duration-300 shadow-[0_0_8px_rgba(var(--primary),0.8)]",
+                                activeView === item.view ? "w-full" : "w-0 group-hover:w-full"
+                            )} />
                         </Link>
                     ))}
                 </div>
@@ -165,7 +185,18 @@ const Navbar = () => {
                                             <Link
                                                 key={item.name}
                                                 to={item.path}
-                                                className="text-lg font-medium text-gray-400 hover:text-white hover:text-primary transition-colors flex items-center gap-3"
+                                                onClick={(e) => {
+                                                    handleLinkClick(e, item);
+                                                    // Close sheet if navigating within dashboard
+                                                    if (onNavigate && item.view && (item.path.startsWith("/dashboard") || item.view === "home")) {
+                                                        // Note: We don't have easy access to close the sheet here without more state, 
+                                                        // but handleLinkClick will prevent default and we can rely on standard Link behavior for others.
+                                                    }
+                                                }}
+                                                className={cn(
+                                                    "text-lg font-medium transition-colors flex items-center gap-3",
+                                                    activeView === item.view ? "text-primary" : "text-gray-400 hover:text-white"
+                                                )}
                                             >
                                                 {item.name}
                                             </Link>
