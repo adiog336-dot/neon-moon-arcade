@@ -1,13 +1,16 @@
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 interface ProfileCardProps {
+    className?: string;
     characterId?: string;
     characterImage?: string;
     characterName?: string;
+    bondCode?: string | null;
 }
 
-const ProfileCard = ({ characterId, characterImage, characterName }: ProfileCardProps) => {
+const ProfileCard = ({ characterId, characterImage, characterName, bondCode }: ProfileCardProps) => {
     const [userName, setUserName] = useState("PLAYER");
     const [userEmail, setUserEmail] = useState("");
     const [joinDate, setJoinDate] = useState("FEB 2024");
@@ -92,6 +95,11 @@ const ProfileCard = ({ characterId, characterImage, characterName }: ProfileCard
                                         <p className="pixel-font text-[10px] sm:text-[12px] md:text-[15px] tracking-widest text-white font-bold">
                                             {userName}
                                         </p>
+                                        {bondCode && (
+                                            <p className="font-mono text-xs text-[hsl(var(--blood-red))] tracking-wider mt-1 font-bold">
+                                                BOND: {bondCode}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 

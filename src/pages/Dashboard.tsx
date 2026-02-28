@@ -7,7 +7,7 @@ import peaceGif from "@/assets/peace.gif";
 import umbrellaGif from "@/assets/umbrella.gif";
 import raniGif from "@/assets/rani.gif";
 import { supabase } from "@/lib/supabase";
-import { Moon } from "lucide-react";
+import { Moon, Copy, Check } from "lucide-react";
 
 const characters = [
     {
@@ -46,6 +46,9 @@ const Dashboard = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [userName, setUserName] = useState("PLAYER");
+    const [userId, setUserId] = useState<string | null>(null);
+    const [bondCode, setBondCode] = useState<string | null>(null);
+    const [copiedCode, setCopiedCode] = useState(false);
     const [activeView, setActiveView] = useState("home"); // "home" or "albums"
 
     const activeCharacter = characters[activeIndex];
@@ -128,6 +131,31 @@ const Dashboard = () => {
                             setActiveIndex(idx);
                         }
                     }
+
+                    // --- Fetch or Generate Bond Code ---
+                    if (isMounted) {
+                        setUserId(user.id);
+                        const { data: bCode } = await supabase
+                            .from("bond_codes")
+                            .select("code")
+                            .eq("user_id", user.id)
+                            .single();
+
+                        if (bCode?.code) {
+                            setBondCode(bCode.code);
+                        } else {
+                            // Generate one if it doesn't exist
+                            const newCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+                            const { data: newRow } = await supabase
+                                .from("bond_codes")
+                                .insert({ user_id: user.id, code: newCode })
+                                .select("code")
+                                .single();
+                            if (newRow?.code) setBondCode(newRow.code);
+                        }
+                    }
+                    // -----------------------------------
+
                 } catch (profileError) {
                     // If profiles table doesn't exist or any other error occurs,
                     // gracefully fall back to localStorage.
@@ -363,6 +391,7 @@ const Dashboard = () => {
                                         characterId={selectedCharacter || undefined}
                                         characterImage={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.image : undefined}
                                         characterName={selectedCharacter ? characters.find(c => c.id === selectedCharacter)?.name : undefined}
+                                        bondCode={bondCode}
                                     />
                                 </div>
 

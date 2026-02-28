@@ -25,8 +25,32 @@ interface NavbarProps {
 const Navbar = ({ activeView = "home", onNavigate }: NavbarProps) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [pendingCount, setPendingCount] = useState(0);
 
     useEffect(() => {
+        const fetchPendingRequests = async () => {
+            try {
+                if (!supabase) return;
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) return;
+
+                const { count } = await supabase
+                    .from("bond_requests")
+                    .select("*", { count: 'exact', head: true })
+                    .eq("to_user", user.id)
+                    .eq("status", "pending");
+
+                if (count !== null) setPendingCount(count);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        };
+
+        fetchPendingRequests();
+
+        // Optional: auto-refresh every minute
+        const interval = setInterval(fetchPendingRequests, 60000);
+
         const handleScroll = () => {
             if (window.scrollY > 20) {
                 setIsScrolled(true);
@@ -36,7 +60,10 @@ const Navbar = ({ activeView = "home", onNavigate }: NavbarProps) => {
         };
 
         window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            clearInterval(interval);
+        };
     }, []);
 
     const navLinks = [
@@ -120,14 +147,18 @@ const Navbar = ({ activeView = "home", onNavigate }: NavbarProps) => {
                     </div>
 
                     {/* Notifications */}
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-gray-300 hover:text-white hover:bg-white/10 rounded-full relative"
-                    >
-                        <Bell className="w-5 h-5" />
-                        <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(var(--primary),0.8)]" />
-                    </Button>
+                    <Link to="/collabs">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-gray-300 hover:text-white hover:bg-white/10 rounded-full relative"
+                        >
+                            <Bell className="w-5 h-5" />
+                            {pendingCount > 0 && (
+                                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(var(--primary),0.8)]" />
+                            )}
+                        </Button>
+                    </Link>
 
                     {/* Create Button */}
                     <Button className="hidden sm:flex items-center gap-2 bg-primary hover:bg-primary/80 text-primary-foreground rounded-full px-6 shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all hover:shadow-[0_0_25px_rgba(var(--primary),0.6)] hover:scale-105 active:scale-95">

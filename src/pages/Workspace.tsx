@@ -10,10 +10,12 @@ import {
     Play, Pause, SkipBack, SkipForward, Volume2, ListMusic,
     MessageSquare, Plus, Send, ChevronDown, ChevronRight,
     Music, Youtube, Lock, Disc3, FileAudio, Loader2,
-    StickyNote, AlertCircle, X, Users,
+    StickyNote, AlertCircle, X, Users, Menu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import { BondChatPanel } from "@/components/BondChatPanel";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -22,6 +24,8 @@ interface SupabaseAlbum {
     name: string;
     created_by: string;
     created_at: string;
+    is_shared?: boolean;
+    creator_code?: string;
 }
 
 interface SupabaseTrack {
@@ -109,8 +113,16 @@ const AlbumRow = ({
                 className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors flex items-center gap-2 group"
             >
                 {open ? <ChevronDown className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" /> : <ChevronRight className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />}
-                <Disc3 className="w-3.5 h-3.5 text-[hsl(var(--blood-red))] flex-shrink-0" />
-                <span className="text-sm text-gray-300 group-hover:text-white truncate flex-1">{album.name}</span>
+                {album.is_shared
+                    ? <Users className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+                    : <Disc3 className="w-3.5 h-3.5 text-[hsl(var(--blood-red))] flex-shrink-0" />
+                }
+                <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-sm text-gray-300 group-hover:text-white truncate">{album.name}</span>
+                    {album.is_shared && (
+                        <span className="text-[9px] text-blue-400/80 font-mono tracking-widest uppercase">By: {album.creator_code}</span>
+                    )}
+                </div>
                 {loading && <Loader2 className="w-3 h-3 animate-spin text-gray-500 flex-shrink-0" />}
             </button>
 
@@ -422,6 +434,10 @@ const Workspace = () => {
     const [albumsError, setAlbumsError] = useState<string | null>(null);
     const [activeTrack, setActiveTrack] = useState<ActiveTrack | null>(null);
 
+    // Auth & Bonds state
+    const [userId, setUserId] = useState<string | null>(null);
+    const [activeBondId, setActiveBondId] = useState<string | null>(null);
+
     // Fetch albums on mount
     useEffect(() => {
         const fetch = async () => {
@@ -430,13 +446,56 @@ const Workspace = () => {
                 if (!supabase) { setAlbums([]); return; }
                 const { data: { user } } = await supabase.auth.getUser();
                 if (!user) { setAlbums([]); return; }
-                const { data, error } = await supabase
+                setUserId(user.id);
+
+                // 1. Fetch User's Own Albums
+                const { data: myAlbums, error } = await supabase
                     .from("albums")
                     .select("id, name, created_by, created_at")
                     .eq("created_by", user.id)
                     .order("created_at", { ascending: false });
+
                 if (error) throw error;
-                setAlbums((data as SupabaseAlbum[]) ?? []);
+                let allAlbums: SupabaseAlbum[] = (myAlbums as SupabaseAlbum[]) ?? [];
+
+                // 2. Fetch Bonds & Shared Albums
+                const { data: bonds } = await supabase
+                    .from("bonds")
+                    .select("id, user1_id, user2_id")
+                    .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`);
+
+                if (bonds && bonds.length > 0) {
+                    // Set the first active bond for chat purposes (simplification for MVP)
+                    setActiveBondId(bonds[0].id);
+
+                    const partnerIds = bonds.flatMap(b => [b.user1_id, b.user2_id]).filter(id => id !== user.id);
+
+                    // Fetch codes to display names
+                    const { data: pCodes } = await supabase
+                        .from("bond_codes")
+                        .select("user_id, code")
+                        .in("user_id", partnerIds);
+
+                    const partnerCodesMap: Record<string, string> = {};
+                    pCodes?.forEach(c => { partnerCodesMap[c.user_id] = c.code; });
+
+                    const { data: sharedAlbums } = await supabase
+                        .from("albums")
+                        .select("id, name, created_by, created_at")
+                        .in("created_by", partnerIds)
+                        .order("created_at", { ascending: false });
+
+                    if (sharedAlbums) {
+                        const enhancedShared = sharedAlbums.map((a: any) => ({
+                            ...a,
+                            is_shared: true,
+                            creator_code: partnerCodesMap[a.created_by] || "UNKNOWN"
+                        }));
+                        allAlbums = [...allAlbums, ...enhancedShared];
+                    }
+                }
+
+                setAlbums(allAlbums);
             } catch (e) {
                 console.error("[Workspace] albums fetch:", e);
                 setAlbumsError("Failed to load library.");
@@ -462,10 +521,10 @@ const Workspace = () => {
             <Navbar />
 
             <div className="relative z-10 pt-24 pb-8 px-4 h-screen flex flex-col">
-                <div className="grid grid-cols-12 gap-5 h-full max-w-[1600px] mx-auto w-full">
+                <div className="flex flex-col lg:grid lg:grid-cols-12 gap-5 h-full max-w-[1600px] mx-auto w-full">
 
-                    {/* ── LEFT SIDEBAR — Library ───────────────────────────── */}
-                    <div className="col-span-2 hidden lg:flex flex-col h-full">
+                    {/* ── LEFT SIDEBAR — Library (Desktop) ───────────────── */}
+                    <div className="hidden lg:flex flex-col h-full col-span-2">
                         <div className="glass-panel flex-1 rounded-2xl border border-white/10 backdrop-blur-xl bg-black/40 flex flex-col overflow-hidden">
                             <div className="flex items-center gap-2 p-4 border-b border-white/5">
                                 <ListMusic className="w-5 h-5 text-[hsl(var(--blood-red))]" />
@@ -504,13 +563,57 @@ const Workspace = () => {
                     </div>
 
                     {/* ── CENTER — Player ──────────────────────────────────── */}
-                    <div className="col-span-12 lg:col-span-7 flex flex-col gap-4 h-full">
+                    <div className="flex-1 lg:col-span-7 flex flex-col gap-4 h-full min-h-0">
 
                         {/* Status strip */}
-                        <div className="glass-panel px-5 py-3 rounded-full flex items-center justify-between border border-white/10 backdrop-blur-md bg-black/30">
+                        <div className="glass-panel px-4 py-3 rounded-full flex items-center justify-between border border-white/10 backdrop-blur-md bg-black/30">
                             <div className="flex items-center gap-3">
+                                {/* Mobile Library Toggle */}
+                                <div className="lg:hidden">
+                                    <Sheet>
+                                        <SheetTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-white bg-white/5 hover:bg-white/10 rounded-full shrink-0">
+                                                <ListMusic className="w-4 h-4" />
+                                            </Button>
+                                        </SheetTrigger>
+                                        <SheetContent side="left" className="bg-black/90 backdrop-blur-xl border-r border-white/10 text-white w-[300px] p-0 flex flex-col">
+                                            <div className="flex items-center gap-2 p-4 border-b border-white/5 mt-8">
+                                                <ListMusic className="w-5 h-5 text-[hsl(var(--blood-red))]" />
+                                                <h2 className="text-sm font-bold tracking-tight text-white/90 pixel-font">LIBRARY</h2>
+                                            </div>
+                                            <ScrollArea className="flex-1 p-3">
+                                                {loadingAlbums && (
+                                                    <div className="flex items-center gap-2 text-gray-500 px-3 py-4">
+                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                        <span className="text-xs pixel-font tracking-widest">LOADING…</span>
+                                                    </div>
+                                                )}
+                                                {!loadingAlbums && albumsError && (
+                                                    <div className="flex items-center gap-2 text-red-400 px-3 py-3 text-xs">
+                                                        <AlertCircle className="w-4 h-4 flex-shrink-0" /> {albumsError}
+                                                    </div>
+                                                )}
+                                                {!loadingAlbums && !albumsError && albums.length === 0 && (
+                                                    <div className="flex flex-col items-center gap-2 py-10 text-gray-600">
+                                                        <Disc3 className="w-8 h-8" />
+                                                        <p className="text-[10px] pixel-font tracking-widest text-center">NO ALBUMS YET</p>
+                                                        <p className="text-[10px] text-gray-700 text-center">Go to Albums to create one.</p>
+                                                    </div>
+                                                )}
+                                                {!loadingAlbums && !albumsError && albums.map((album) => (
+                                                    <AlbumRow
+                                                        key={album.id}
+                                                        album={album}
+                                                        activeTrack={activeTrack}
+                                                        onSelectTrack={handleSelectTrack}
+                                                    />
+                                                ))}
+                                            </ScrollArea>
+                                        </SheetContent>
+                                    </Sheet>
+                                </div>
                                 <div className={cn(
-                                    "w-2 h-2 rounded-full",
+                                    "w-2 h-2 rounded-full hidden sm:block",
                                     activeTrack ? "bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" : "bg-gray-600"
                                 )} />
                                 <span className="text-sm font-medium text-white/80">
@@ -551,7 +654,7 @@ const Workspace = () => {
                     </div>
 
                     {/* ── RIGHT SIDEBAR — Notes / Chat ─────────────────────── */}
-                    <div className="col-span-12 lg:col-span-3 h-full flex flex-col">
+                    <div className="flex-1 lg:col-span-3 h-full flex flex-col min-h-0">
                         <div className="glass-panel flex-1 rounded-2xl border border-white/10 backdrop-blur-xl bg-black/40 overflow-hidden flex flex-col">
                             <Tabs defaultValue="notes" className="flex flex-col h-full w-full">
                                 <div className="px-4 pt-4 pb-2 border-b border-white/10">
@@ -576,8 +679,12 @@ const Workspace = () => {
                                     <NotesTab albumId={activeAlbumId} />
                                 </TabsContent>
 
-                                <TabsContent value="chat" className="flex-1 m-0 outline-none overflow-hidden">
-                                    <ChatLockedTab />
+                                <TabsContent value="chat" className="flex-1 m-0 outline-none overflow-hidden pb-4">
+                                    {activeBondId && userId ? (
+                                        <BondChatPanel bondId={activeBondId} currentUserId={userId} />
+                                    ) : (
+                                        <ChatLockedTab />
+                                    )}
                                 </TabsContent>
                             </Tabs>
                         </div>
