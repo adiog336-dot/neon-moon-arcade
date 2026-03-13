@@ -50,6 +50,7 @@ const Dashboard = () => {
     const [bondCode, setBondCode] = useState<string | null>(null);
     const [copiedCode, setCopiedCode] = useState(false);
     const [activeView, setActiveView] = useState("home"); // "home" or "albums"
+    const [avatarUrl, setAvatarUrl] = useState("");
 
     const activeCharacter = characters[activeIndex];
 
@@ -132,6 +133,21 @@ const Dashboard = () => {
                         }
                     }
 
+                    // Load avatar URL
+                    const storedAvatar = window.localStorage.getItem(`nm-avatar-${user.id}`);
+                    if (storedAvatar && isMounted) setAvatarUrl(storedAvatar);
+                    try {
+                        const { data: avatarData } = await supabase
+                            .from("profiles")
+                            .select("avatar_url")
+                            .eq("id", user.id)
+                            .single();
+                        if (avatarData?.avatar_url && isMounted) {
+                            setAvatarUrl(avatarData.avatar_url);
+                            window.localStorage.setItem(`nm-avatar-${user.id}`, avatarData.avatar_url);
+                        }
+                    } catch { }
+
                     // --- Fetch or Generate Bond Code ---
                     if (isMounted) {
                         setUserId(user.id);
@@ -194,6 +210,7 @@ const Dashboard = () => {
     const handleConfirmSelection = async () => {
         const chosenId = activeCharacter.id;
         setSelectedCharacter(chosenId);
+        setActiveIndex(characters.findIndex(c => c.id === chosenId));
 
         // Always keep a simple fallback
         window.localStorage.setItem("nm-character-fallback", chosenId);
@@ -227,9 +244,23 @@ const Dashboard = () => {
         }
     };
 
+    /** Called by Navbar when user saves their artist card / avatar */
+    const handleProfileSaved = (characterId: string, newAvatarUrl: string) => {
+        setSelectedCharacter(characterId);
+        const idx = characters.findIndex(c => c.id === characterId);
+        if (idx !== -1) setActiveIndex(idx);
+        setAvatarUrl(newAvatarUrl);
+    };
+
     return (
         <div className="relative min-h-screen bg-[hsl(var(--studio-dark))] text-white prevent-overflow">
-            <Navbar activeView={activeView} onNavigate={setActiveView} />
+            <Navbar
+                activeView={activeView}
+                onNavigate={setActiveView}
+                currentCharacterId={selectedCharacter}
+                currentAvatarUrl={avatarUrl}
+                onProfileSaved={handleProfileSaved}
+            />
             {/* Character selection overlay shown right after auth */}
             {!loadingProfile && !selectedCharacter && (
                 <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-md safe-area-padding">

@@ -545,6 +545,14 @@ const AlbumsView = ({ onBack }: { onBack: () => void }) => {
             } finally { setLoading(false); }
         };
         fetch();
+
+        // Check for action=create in URL
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("action") === "create") {
+            setModalOpen(true);
+            // Optionally clear the param so it doesn't re-open on refresh? 
+            // In a small app, it's fine.
+        }
     }, []);
 
     const createAlbum = async (name: string) => {
